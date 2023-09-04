@@ -32,12 +32,17 @@ jobs:
     #     # echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
 
     - name: Build
-      run: echo $(git describe --tags) > Release.txt
+      run: echo $(git describe --tags) > Release.yaml
     - name: Test
-      run: cat Release.txt
+      run: cat Release.yaml
+    # - name: Release
+    #   uses: softprops/action-gh-release@v1
+    #   # if: startsWith(github.ref, 'refs/tags/')
+    #   with:
+    #     files: Release.txt
+    #     token: ${{ secrets.GITHUB_TOKEN }}
     - name: Release
-      uses: softprops/action-gh-release@v1
-      # if: startsWith(github.ref, 'refs/tags/')
+      uses: google-github-actions/release-please-action@v3
       with:
-        files: Release.txt
+        extra-files: Release.yaml
         token: ${{ secrets.GITHUB_TOKEN }}
