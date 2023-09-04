@@ -14,27 +14,28 @@ jobs:
   release-composition-artifact:
     runs-on: ubuntu-latest
     steps: 
+    - name: Checkout code
+      uses: actions/checkout@v2
+      fetch-depth: 0
     - name: determine tag
       id: get_tag
       run: |
-        if [[ -n "$GITHUB_REF" ]]; then
-          # Extract tag name from GITHUB_REF (refs/tags/tag_name)
-          TAG_NAME=$(echo "$GITHUB_REF" | sed 's/refs\/tags\///')
-        else
-          # Use the manually provided tag, if available
-          TAG_NAME="${{ github.event.inputs.tag_name }}"
-        fi
-        echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
-    - name: Checkout code
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ steps.get_tag.outputs.get_tag }}
-    - name: Build
-      run: echo $(git describe --tags) > Release.txt
-    - name: Test
-      run: cat Release.txt
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      # if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: Release.txt
+        echo "$GITHUB_REF"
+        # if [[ -n "$GITHUB_REF" ]]; then
+        #   # Extract tag name from GITHUB_REF (refs/tags/tag_name)
+        #   TAG_NAME=$(echo "$GITHUB_REF" | sed 's/refs\/tags\///')
+        # else
+        #   # Use the manually provided tag, if available
+        #   TAG_NAME="${{ github.event.inputs.tag_name }}"
+        # fi
+        # echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
+
+    # - name: Build
+    #   run: echo $(git describe --tags) > Release.txt
+    # - name: Test
+    #   run: cat Release.txt
+    # - name: Release
+    #   uses: softprops/action-gh-release@v1
+    #   # if: startsWith(github.ref, 'refs/tags/')
+    #   with:
+    #     files: Release.txt
